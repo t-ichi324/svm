@@ -1,11 +1,34 @@
-<?php include_once __DIR__.DIRECTORY_SEPARATOR."func.r";
-    echoHead("MySql - Sql");
+<?php include_once __DIR__.DIRECTORY_SEPARATOR.".func.php";
+    HtmlEcho::HEAD("MySql - Sql");
     
-    $usr = formVal("usr");
-    $pw = formVal("pw");
-    $host = formVal("host");
-    $dbname = formVal("dbname");
     $sql = formval("sql");
+    
+    $usr = formval("usr");
+    $pw = formval("pw");
+    $host = formval("host");
+    $dbname = formval("dbname");
+    $bin = formval("bin");
+
+    //save
+    $f_json = Path::tmp("-save-dbcon.json");
+    $json = array();
+    if($_POST){
+        $json["usr"] = $usr;
+        $json["pw"] = $pw;
+        $json["host"] = $host;
+        $json["dbname"] = $dbname;
+        $json["bin"] = $bin;
+        file_put_contents($f_json, json_encode($json));
+    }else{
+        if(file_exists($f_json)){
+            $json = json_decode(file_get_contents($f_json), true);
+            $usr = isset($json["usr"]) ? $json["usr"] : "";
+            $pw = isset($json["pw"]) ? $json["pw"] : "";
+            $host = isset($json["host"]) ? $json["host"] : "";
+            $dbname = isset($json["dbname"]) ? $json["dbname"] : "";
+            $bin = isset($json["bin"]) ? $json["bin"] : "";
+        }
+    }
 ?>
 <style>
     .result-wrap{
@@ -23,24 +46,25 @@
     <table>
         <tr>
             <td>DB_NAME</td>
-            <td><input type="text" name="dbname" placeholder="dbname" value="<?= htmlspecialchars($dbname) ?>" ></td>
+            <td><input type="text" name="dbname" placeholder="dbname" value="<?= h($dbname) ?>" ></td>
         </tr>
         <tr>
             <td>DB_USER</td>
-            <td><input type="text" name="usr" required placeholder="user" value="<?= htmlspecialchars($usr) ?>" ></td>
+            <td><input type="text" name="usr" required placeholder="user" value="<?= h($usr) ?>" ></td>
         </tr>
         <tr>
             <td>DB_PASSWORD</td>
-            <td><input type="password" name="pw" required placeholder="password" value="<?= htmlspecialchars($pw) ?>" ></td>
+            <td><input type="password" name="pw" required placeholder="password" value="<?= h($pw) ?>" ></td>
         </tr>
         <tr>
             <td>DB_HOST</td>
-            <td><input type="text" name="host" placeholder="host" value="<?= htmlspecialchars($host) ?>" ></td>
+            <td><input type="text" name="host" placeholder="host" value="<?= h($host) ?>" ></td>
         </tr>
     </table>
+    <input type="hidden" name="bin" value="<?= h($bin) ?>">
     <hr>
     sql:<br>
-    <textarea name="sql" style="min-height: 5rem; min-width: 50%"><?= htmlspecialchars($sql); ?></textarea><br>
+    <textarea name="sql" style="min-height: 5rem; min-width: 50%"><?= h($sql); ?></textarea><br>
     <button>run</button>
 </form>
 <hr>
@@ -67,7 +91,7 @@
                 $r0 = $rows[0];
                 echo "<thead><tr>";
                 foreach ($r0 as $k => $v){
-                    echo "<th>". htmlspecialchars($k)."</th>";
+                    echo "<th>". h($k)."</th>";
                 }
                 echo "</tr></thead>";
             }
@@ -75,15 +99,16 @@
             foreach ($rows as $row) {
                 echo "<tr>";
                 foreach($row as $col){
-                    echo "<td>".htmlspecialchars($col)."</td>";
+                    echo "<td>".h($col)."</td>";
                 }
                 echo "</tr>";
             }
             echo "</tbody></table>";
             echo "</div>";
         }catch (Exception $e){
-            echo "<p style='color:#f00'>Error: ".htmlspecialchars($e->getMessage())."</p>";
+            echo "<p style='color:#f00'>Error: ".h($e->getMessage())."</p>";
         }
     }
 ?>
-<?php echoFoot(); ?>
+
+<?php HtmlEcho::FOOT(); ?>

@@ -1,61 +1,42 @@
-<?php include_once __DIR__.DIRECTORY_SEPARATOR."func.r";
-    $d = formVal("i","");
-    if($d == ""){ $d = realpath(__DIR__."/.."); }else{ $d = base64_decode($d); }
-    
-    if(!file_exists($d)){
-        echoHead(htmlspecialchars("404 NOT FOUND"));
-        echo htmlspecialchars($d);
-        echoFoot();
-        die();
+<?php include_once __DIR__.DIRECTORY_SEPARATOR.".func.php";
+    if(isEmpty(DIR_ROOT)){
+        FM::read(__DIR__);
+    }else{
+        FM::read(DIR_ROOT);
     }
+
+    $di = FM::getDirectoryInfo();
+    $dirs = $di->getDirectoryInfos();
+    $files = $di->getFileInfos();
     
-    $my = pathinfo($d);
-    if(isset($_GET["op"])){
-        $op = $_GET["op"];
-        //Download
-        if($op == "zip"){
-            $zipfile = toZip($d);
-            if($zipfile !== null){
-                header("Location: ./file.php?i=".base64_encode($zipfile));
-            }
-        }
-    }
-    
-    $r = getDir($d);
-    $dirs = $r["dirs"];
-    $files = $r["files"];
-    
-    $name = $my["basename"];
-    echoHead(htmlspecialchars($name));
-    echoPathTbl($d);
-    
+    HtmlEcho::HEAD($di->name());
+    FM::echo_breadcrumb();
 ?>
-<p><a href="./zip.php?t=1&i=<?= base64_encode($d); ?>" onclick="return cnfZip()" >DOWNLOAD (Zip)</a></p>
+<p><a href="./zip.php?i=<?= FM::$id; ?>&op=dl" onclick="return cnfZip()">DOWNLOAD (Zip)</a></p>
 <hr>
 <table>
 <tbody>
-<?php foreach($dirs as $k => $v): ?>
+<?php foreach($dirs as $sd): $i = FM::toId($sd->fullName()); ?>
 <tr class="d">
-<td class="c">Dir:</td>
-<td class="n"><a href="./dir.php?i=<?= urlencode($k); ?>"><?= $v["name"]; ?></a>
-<td class="c"></td>
-<td class="ft"><?php echoTime($v["time"]); ?></td>
-<td class="a"><?php if($v["name"] != ".."){ ?><a href="./zip.php?t=1&i=<?= $k; ?>" onclick="return cnfZip()" >Zip</a><?php } ?></td>
+<td class="n"><i class="icon icon-dir margin-r"></i> <a href="./dir.php?i=<?=$i;?>"><?= h($sd->name()); ?></a>
+<td class="ft"><?php HtmlEcho::fileTime($sd->mTime()); ?></td>
+<td class="ft"></td>
+<td class="a"><a href="./zip.php?i=<?=$i;?>&op=dl" onclick="return cnfZip()">Zip</a></td>
 <tr>
 <?php endforeach; ?>
-<?php foreach($files as $k => $v): ?>
+<?php foreach($files as $sf): $i = FM::toId($sf->fullName()); ?>
 <tr class="f">
-<td class="c">File:</td>
-<td class="n"><a href="./file.php?i=<?= urlencode($k); ?>"><?= $v["name"]; ?></a>
-<td class="c" style="text-align: right"><small><?= $v["size"] ?> byte</small></td>
-<td class="ft"><?php echoTime($v["time"]); ?></td>
+<td class="n"><i class="icon icon-file margin-r"></i> <a href="./file.php?i=<?=$i;?>"><?= h($sf->name()); ?></a>
+<td class="ft"><?php HtmlEcho::fileTime($sf->mTime()); ?></td>
+<td class="ft"><?= HtmlEcho::fileSize(filesize($sf->fullName())); ?></td>
 <td class="a">
-    <?php if(preg_match("/^.+\.dep\.ini$/", $v["name"])){ ?><a href="./deploy.php?i=<?= $k; ?>">Deploy</a><?php } ?>
-    <?php if($v["ext"] == "zip"){ ?><a href="./zip.php?i=<?= $k; ?>">UnZip</a><?php } ?>
+    <?php if(preg_match("/^.+\.dep\.ini$/", $sf->name())){ ?><a href="./deploy.php?i=<?=$i;?>">Deploy</a><?php } ?>
+    <?php if($sf->extension(false) == "zip"){ ?><a href="./zip.php?i=<?=$i;?>">UnZip</a><?php } ?>
 </td>
 <tr>
 <?php endforeach; ?>
 </tbody>
 </table>
+</script>
 
-<?php echoFoot(); ?>
+<?php HtmlEcho::FOOT(); ?>

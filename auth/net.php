@@ -1,34 +1,62 @@
-<?php include_once __DIR__.DIRECTORY_SEPARATOR."func.r";
-    echoHead("Network");
-    $run = formVal("run", "dns");
+<?php include_once __DIR__.DIRECTORY_SEPARATOR.".func.php";
+    HtmlEcho::HEAD("Network");
+    
+    $run = formval("run", "dns");
     //dns
-    $dns = formVal("dns");
+    $dns = formval("dns");
     //curl
-    $curl = formVal("curl");
-    $ua = formVal("ua", $_SERVER['HTTP_USER_AGENT']);
-    $method = formVal("method", "GET");
-    $ssl = formVal("ssl", "1");
+    $curl = formval("curl");
+    $ua = formval("ua", $_SERVER['HTTP_USER_AGENT']);
+    $method = formval("method", "GET");
+    $ssl = formval("ssl", "1");
     //port
-    $host = formVal("host");
-    $port = formVal("port", 80);
-    $protocol = formVal("protocol");
+    $host = formval("host");
+    $port = formval("port", 80);
+    $protocol = formval("protocol");
+    
+    function sysCmd_echo(... $lines){
+        $cmd = "";
+        echo "<div class='cmd' style='font-family:monospace;background-color:#000; color:#fff; padding:.5rem; margin-bottom:.5rem;'>";
+        if(is_array($lines)){
+            foreach($lines as $v){
+                echo h($v)."<br>";
+                if($cmd !== "") { $cmd.="\n"; }
+                $cmd .= $v;
+            }
+        }else{
+            $cmd = $lines;
+            echo h($cmd)."<br>";
+        }
+        echo "</div>";
+        $opt = null;
+        exec($cmd, $opt);
+        echo "<div class='cmd' style='font-family:monospace;background-color:#333; color:#fff; padding:.5rem; margin-bottom:.5rem; margin-left: 1rem;'>";
+        if(!empty($opt)){
+            foreach($opt as $o){
+                $line = toUtf8($o);
+                if(trim($line) == "") { continue; }
+                echo h($line)."<br>";
+            }
+        }
+        echo "</div>";
+    }
 ?>
 <div class="tgl-nav">
 <?php 
-    tglPnlRadio("dns", "DNS", $run);
-    tglPnlRadio("curl", "cURL", $run);
-    tglPnlRadio("port", "Port", $run);
-    tglPnlRadio("trac", "Trace", $run);
+    HtmlEcho::tglPnl_radio("dns", "DNS", $run);
+    HtmlEcho::tglPnl_radio("curl", "cURL", $run);
+    HtmlEcho::tglPnl_radio("port", "Port", $run);
+    HtmlEcho::tglPnl_radio("trac", "Trace", $run);
 ?>
 </div>
-<div <?php tglPnlAttr("dns", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("dns", $run); ?>>
     <h2>DNS Checker</h2>
     <form method="post">
         <input type="hidden" name="run" value="dns">
         <table>
             <tr>
                 <td>domain or ip:</td>
-                <td><input type="text" name="dns" value="<?= htmlspecialchars($dns); ?>" placeholder="domain or ip"></td>
+                <td><input type="text" name="dns" value="<?= h($dns); ?>" placeholder="domain or ip"></td>
             </tr>
         </table>
         <button type="submit">CHECK</button>
@@ -70,7 +98,7 @@
                             $val .= $k2."=".$v2."\t";
                         }
                     }
-                    echo "<td>".htmlspecialchars($val)."</td>";
+                    echo "<td>".h($val)."</td>";
                     echo "</tr>";
                 }
                 echo "</table></tbody>";?>
@@ -113,14 +141,14 @@
         </table>
     </div>
 </div>
-<div <?php tglPnlAttr("curl", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("curl", $run); ?>>
     <h2>cURL Checker</h2>
     <form method="post">
         <input type="hidden" name="run" value="curl">
         <table>
             <tr>
                 <td>Url:</td>
-                <td><input type="url" name="curl" value="<?= htmlspecialchars($curl); ?>" required placeholder="url"></td>
+                <td><input type="url" name="curl" value="<?= h($curl); ?>" required placeholder="url"></td>
             </tr>
             <tr>
                 <td>Method:</td>
@@ -134,7 +162,7 @@
             </tr>
             <tr>
                 <td>UserAgent:</td>
-                <td><input type="text" name="ua" value="<?= htmlspecialchars($ua); ?>" placeholder="(opt) user-agent"></td>
+                <td><input type="text" name="ua" value="<?= h($ua); ?>" placeholder="(opt) user-agent"></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -176,16 +204,16 @@
             
             if($info !== null){ ?>
             <p>Header:</p>
-            <pre style="height: 5rem;"><?= htmlspecialchars($result["header"]); ?></pre>
+            <pre style="height: 5rem;"><?= h($result["header"]); ?></pre>
             <p>Body:</p>
-            <pre><?= htmlspecialchars($result["body"]); ?></pre>
+            <pre><?= h($result["body"]); ?></pre>
             <p>Info:</p>
             <table>
                 <tbody>
                     <?php foreach($info as $k => $v){ if(!is_array($v)){ ?>
                     <tr>
-                        <td><?= htmlspecialchars($k); ?></td>
-                        <td><?= htmlspecialchars($v); ?></td>
+                        <td><?= h($k); ?></td>
+                        <td><?= h($v); ?></td>
                     </tr>
                     <?php }} ?>
                 </tbody>
@@ -196,18 +224,18 @@
         ?>
     </form>
 </div>
-<div <?php tglPnlAttr("port", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("port", $run); ?>>
     <h2>Port Checker</h2>
     <form method="get">
         <input type="hidden" name="run" value="port">
         <table>
             <tr>
                 <td>Host</td>
-                <td><input type="text" name="host" value="<?= htmlspecialchars($host); ?>" required placeholder="domain or ip"></td>
+                <td><input type="text" name="host" value="<?= h($host); ?>" required placeholder="domain or ip"></td>
             </tr>
             <tr>
                 <td>Port</td>
-                <td><input type="number" name="port" value="<?= htmlspecialchars($port); ?>" required placeholder="port number"></td>
+                <td><input type="number" name="port" value="<?= h($port); ?>" required placeholder="port number"></td>
             </tr>
             <tr>
                 <td>Protocol</td>
@@ -228,7 +256,7 @@
             $errstr = "";
             $errno = -1;
             $status = "<span style='color:#f00;'>ERROR</span>";
-            $cmd = htmlspecialchars($hn).":".$port."<br>";
+            $cmd = h($hn).":".$port."<br>";
             try{
                 $fp = @fsockopen($hn, $port, $errno, $errstr, 1);
                 if(!$fp){
@@ -267,14 +295,14 @@
         </table>
     </div>
 </div>
-<div <?php tglPnlAttr("trac", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("trac", $run); ?>>
     <h2>Traceroute Checker</h2>
     <form method="post">
         <input type="hidden" name="run" value="trac">
         <table>
             <tr>
                 <td>domain or ip:</td>
-                <td><input type="text" name="dns" value="<?= htmlspecialchars($dns); ?>" placeholder="domain or ip"></td>
+                <td><input type="text" name="dns" value="<?= h($dns); ?>" placeholder="domain or ip"></td>
             </tr>
         </table>
         <button type="submit">CHECK</button>
@@ -289,4 +317,5 @@
         }
     ?>
 </div>
-<?php echoFoot(); ?>
+
+<?php HtmlEcho::FOOT(); ?>

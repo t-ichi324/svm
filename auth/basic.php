@@ -1,24 +1,30 @@
-<?php include_once __DIR__.DIRECTORY_SEPARATOR."func.r";
-    $msg = "";
+<?php include_once __DIR__.DIRECTORY_SEPARATOR.".func.php";
     
     //.htpasswd
     $f_pw = __DIR__.DIRECTORY_SEPARATOR.".htpasswd";
     $f_ac = __DIR__.DIRECTORY_SEPARATOR.".htaccess";
-    $f_json = getTmpDir().DIRECTORY_SEPARATOR."basic.json";
+    $f_json = Path::tmp("save-auth.json");
     
-    $run = formVal("run");
+    $run = formval("run");
     $json = array();
     
     if($run == "reset"){
-        if(file_exists($f_pw)){ unlink($f_pw); }
-        file_put_contents($f_ac, "Allow from all\n");
-        $msg = "reset basic-auth.";
+        $f_1st = __DIR__.DIRECTORY_SEPARATOR.".htaccess_1st";
+        if(file_exists($f_1st)){
+            file_put_contents($f_ac, file_get_contents($f_1st));
+            Message::$info = "[REST] from > ".$f_1st."";
+        }else{
+            if(file_exists($f_pw)){ unlink($f_pw); }
+            file_put_contents($f_ac, "Allow from all\n");
+            Message::$info = "[REST] allow from all.";
+        }
+        if(file_exists($f_json)){ unlink($f_json); }
         
     }elseif($run == "update" && hasPost("u","p")){
-        $id = formVal("u","");
-        $pw = formVal("p","");
-        $c = formVal("c","");
-        $ip = formVal("ip","");
+        $id = formval("u","");
+        $pw = formval("p","");
+        $c = formval("c","");
+        $ip = formval("ip","");
         
         if($c == "plain"){
             $passwd =  $id.":".$pw;
@@ -44,7 +50,7 @@
                 
         file_put_contents($f_ac, $htac);
         
-        $msg = "update basic-auth.";
+        Message::$info = "[UPDATE] basic-auth.";
         
         $json = array("u"=>$id, "p"=>$pw, "c"=>$c, "ip"=>$ip);
         file_put_contents($f_json, json_encode($json));
@@ -54,14 +60,13 @@
         }
     }
     
-    echoHead("Basic Auth");
+    HtmlEcho::HEAD("Basic Auth");
 ?>
 <hr>
-<p style="color:#f00"><?= htmlspecialchars($msg); ?></p>
 <form method="post" onsubmit="return confirm('Are you sure you want to update?')">
     <input type="hidden" name="run" value="update">
-    <input type="text" name="u" required placeholder="auth user" value="<?= isset($json["u"]) ? htmlspecialchars($json["u"]) : ""; ?>">
-    <input type="password" name="p" required placeholder="password" value="<?= isset($json["p"]) ? htmlspecialchars($json["p"]) : ""; ?>">
+    <input type="text" name="u" required placeholder="auth user" value="<?= isset($json["u"]) ? h($json["u"]) : ""; ?>">
+    <input type="password" name="p" required placeholder="password" value="<?= isset($json["p"]) ? h($json["p"]) : ""; ?>">
     <br>
     <select name="c" required>
         <option value="ph">password_hash</option>
@@ -69,7 +74,7 @@
     </select>
     <br>
     <br>
-    <textarea name="ip" style="width: 20rem;height: 4rem;" placeholder="allow-ip(optional)"><?= isset($json["ip"]) ? htmlspecialchars($json["ip"]) : ""; ?></textarea>
+    <textarea name="ip" style="width: 20rem;height: 4rem;" placeholder="allow-ip(optional)"><?= isset($json["ip"]) ? h($json["ip"]) : ""; ?></textarea>
     <p>YOUR-IP: <?= $_SERVER["REMOTE_ADDR"]; ?></p>
     <br>
     <button type="submit" >UPDATE</button>
@@ -79,4 +84,4 @@
     <input type="hidden" name="run" value="reset">
     <button type="submit">RESET</button>
 </form>
-<?php echoFoot(); ?>
+<?php HtmlEcho::FOOT(); ?>

@@ -1,0 +1,74 @@
+body{font-family:Arial; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; }
+h1{ font-size: 25px; }
+h2{ font-size: 18px; margin: 2em 0 1em; border-left: 5px solid #eee; padding-left: 0.75rem; }
+
+textarea{min-width: 12rem;min-height: 3rem;}
+.freenote{border: none; background-color: #eee; padding: .5em; width: 90%; height: 8em;resize: none;}
+
+.menu{ padding: 10px;  border-bottom: 1px solid #eee; }
+.menu a{display:inline-block; margin-right: 10px; padding: 0.25rem 0.5em; border: 1px solid #666;  }
+.wrap{box-sizing: border-box; margin: 20px;}
+td{padding:5px 10px; border-bottom: 1px solid #eee;}
+
+.breadcrumb-tbl td{  background-color: #f0f8ff; }
+.breadcrumb-path{ color:#888; font-size: 0.8em;margin-left: 0.5em; }
+
+tr.d td{background-color: #f5f5dc; }
+tr.f td{background-color: #e9ecef; }
+td.c{ min-width:4em; }
+td.n{ min-width:12em; }
+td.a{ min-width:2em; text-align:center; font-size:0.8em; }
+td.ft{ font-size:0.8rem; text-align: right; color: #777;}
+form table { margin-bottom:1.5rem; }
+form button[type='submit'] { margin-bottom: 2rem; }
+.pi{ padding-left: 5px; margin: 10px 0; }
+pre{border:1px solid #eee; padding: 1em; overflow-y: auto; height: 50vh; }
+.no-pre {border:1px solid #eee; padding: 1em; height: 50vh; background-color:#fafafa; text-align:center; }
+.tgl-nav{box-sizing: border-box; width:100%; margin: 0; padding:0.5rem; background-color: #fafafa; border: 1px solid #eee; }
+.tgl-radio{margin:.5rem; }
+.tgl-pnl{box-sizing: border-box; withd:100%; }
+.tips{box-sizing: border-box; font-size: 0.8rem; margin-top:1rem; background: #fafafa; padding: .5rem;border:1px solid #eee;}
+
+.flex-row{ display: flex; flex-wrap: wrap; margin: .5rem 0 .5rem 0; }
+.flex-col{ flex: 1; margin: 0; min-width: 300px; ; text-align: left;}
+.flex-col-c{ flex: 1; margin: 0; min-width: 300px; ; text-align: center;}
+.flex-col-r{ flex: 1; margin: 0; min-width: 300px; text-align: right;}
+
+.c-pointr{ cursor: pointer;}
+.margin-l{ margin-leftt: 1rem; }
+.margin-r{ margin-right: 1rem; }
+
+.icon{
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: auto;
+    display: inline-block;
+    vertical-align: middle;
+    height: 1em;
+    width: 1em;
+}
+.icon-file{
+    /* https://ionic.io/  */
+    /* document-outline */
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ionicon%22%20viewBox%3D%220%200%20512%20512%22%3E%3Ctitle%3EDocument%3C%2Ftitle%3E%3Cpath%20d%3D%22M416%20221.25V416a48%2048%200%2001-48%2048H144a48%2048%200%2001-48-48V96a48%2048%200%200148-48h98.75a32%2032%200%200122.62%209.37l141.26%20141.26a32%2032%200%20019.37%2022.62z%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%2232%22%2F%3E%3Cpath%20d%3D%22M256%2056v120a32%2032%200%200032%2032h120%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%2232%22%2F%3E%3C%2Fsvg%3E');
+}
+.icon-dir{
+    /* https://ionic.io/  */
+    /* folder-open-outline */
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ionicon%22%20viewBox%3D%220%200%20512%20512%22%3E%3Ctitle%3EFolder%20Open%3C%2Ftitle%3E%3Cpath%20d%3D%22M64%20192v-72a40%2040%200%200140-40h75.89a40%2040%200%200122.19%206.72l27.84%2018.56a40%2040%200%200022.19%206.72H408a40%2040%200%200140%2040v40%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%2232%22%2F%3E%3Cpath%20d%3D%22M479.9%20226.55L463.68%20392a40%2040%200%2001-39.93%2040H88.25a40%2040%200%2001-39.93-40L32.1%20226.55A32%2032%200%200164%20192h384.1a32%2032%200%200131.8%2034.55z%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%2232%22%2F%3E%3C%2Fsvg%3E');
+}
+.icon-setting{
+    /* https://ionic.io/  */
+    /* settings-outline */
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ionicon%22%20viewBox%3D%220%200%20512%20512%22%3E%3Ctitle%3ESettings%3C%2Ftitle%3E%3Cpath%20d%3D%22M262.29%20192.31a64%2064%200%201057.4%2057.4%2064.13%2064.13%200%2000-57.4-57.4zM416.39%20256a154.34%20154.34%200%2001-1.53%2020.79l45.21%2035.46a10.81%2010.81%200%20012.45%2013.75l-42.77%2074a10.81%2010.81%200%2001-13.14%204.59l-44.9-18.08a16.11%2016.11%200%2000-15.17%201.75A164.48%20164.48%200%2001325%20400.8a15.94%2015.94%200%2000-8.82%2012.14l-6.73%2047.89a11.08%2011.08%200%2001-10.68%209.17h-85.54a11.11%2011.11%200%2001-10.69-8.87l-6.72-47.82a16.07%2016.07%200%2000-9-12.22%20155.3%20155.3%200%2001-21.46-12.57%2016%2016%200%2000-15.11-1.71l-44.89%2018.07a10.81%2010.81%200%2001-13.14-4.58l-42.77-74a10.8%2010.8%200%20012.45-13.75l38.21-30a16.05%2016.05%200%20006-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16%2016%200%2000-6.07-13.94l-38.19-30A10.81%2010.81%200%200149.48%20186l42.77-74a10.81%2010.81%200%200113.14-4.59l44.9%2018.08a16.11%2016.11%200%200015.17-1.75A164.48%20164.48%200%2001187%20111.2a15.94%2015.94%200%20008.82-12.14l6.73-47.89A11.08%2011.08%200%2001213.23%2042h85.54a11.11%2011.11%200%200110.69%208.87l6.72%2047.82a16.07%2016.07%200%20009%2012.22%20155.3%20155.3%200%200121.46%2012.57%2016%2016%200%200015.11%201.71l44.89-18.07a10.81%2010.81%200%200113.14%204.58l42.77%2074a10.8%2010.8%200%2001-2.45%2013.75l-38.21%2030a16.05%2016.05%200%2000-6.05%2014.08c.33%204.14.55%208.3.55%2012.47z%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%2232%22%2F%3E%3C%2Fsvg%3E')
+}
+.icon-ellipsis-v{
+    /* https://ionic.io/  */
+    /* ellipsis-vertical-outline */
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ionicon%22%20viewBox%3D%220%200%20512%20512%22%3E%3Ctitle%3EEllipsis%20Vertical%3C%2Ftitle%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22416%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%2296%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3C%2Fsvg%3E');
+}
+.icon-ellipsis-h{
+    /* https://ionic.io/  */
+    /* ellipsis-horizontal-outline */
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ionicon%22%20viewBox%3D%220%200%20512%20512%22%3E%3Ctitle%3EEllipsis%20Horizontal%3C%2Ftitle%3E%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3Ccircle%20cx%3D%22416%22%20cy%3D%22256%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3Ccircle%20cx%3D%2296%22%20cy%3D%22256%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-miterlimit%3D%2210%22%20stroke-width%3D%2232%22%2F%3E%3C%2Fsvg%3E');
+}

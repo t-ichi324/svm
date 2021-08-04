@@ -1,18 +1,17 @@
-<?php include_once __DIR__.DIRECTORY_SEPARATOR."func.r";
-    $run = formVal("run", "hta");
-    $txt = formVal("txt");
-    
+<?php include_once __DIR__.DIRECTORY_SEPARATOR.".func.php";
+    $run = formval("run", "hta");
+    $txt = formval("txt");
     
     if($run == "hta" && $txt == "1"){
         $rewriteOn = false;
         $hta = "";
-        $domain_red = formVal("domain_red", "");
-        $ssl_red = formVal("ssl_red", "");
-        $www_red = formVal("www_red", "");
-        $indexes = formVal("indexes", "");
+        $domain_red = formval("domain_red", "");
+        $ssl_red = formval("ssl_red", "");
+        $www_red = formval("www_red", "");
+        $indexes = formval("indexes", "");
         
-        $ip_deny = lineToArray(formVal("ip_deny",""));
-        $ip_allow = lineToArray(formVal("ip_allow",""));
+        $ip_deny = lineToArray(formval("ip_deny",""));
+        $ip_allow = lineToArray(formval("ip_allow",""));
         
         if($domain_red !== ""){
             $hta.="# Domain Redirect\n";
@@ -63,8 +62,8 @@
             $hta.= "\n";
         }
         
-        if(formVal("wp_def","") !== ""){
-            $wp_dir = formVal("wp_dir");
+        if(formval("wp_def","") !== ""){
+            $wp_dir = formval("wp_dir");
             if($wp_dir != null){ $wp_dir = trim($wp_dir,"/")."/"; }
             $hta.="# BEGIN WordPress"."\n";
             $hta.="<IfModule mod_rewrite.c>"."\n";
@@ -78,7 +77,7 @@
             $hta.="# END WordPress"."\n";
             $hta.= "\n";
         }
-        if(formVal("ssm_def","") !== ""){
+        if(formval("ssm_def","") !== ""){
             $hta.="# BEGIN Sesame"."\n";
             $hta.="<IfModule mod_rewrite.c>"."\n";
             $hta.="RewriteEngine on"."\n";
@@ -90,37 +89,37 @@
         }
         
         //textShow($hta);
-        textDownload($hta, "---.htaccess");
+        Response::textDownload($hta, "---.htaccess");
     }
     
     if($run == "userini" && $txt == "1"){
         $ini = "";
         $nms = array("post_max_size", "upload_max_filesize", "memory_limit", "max_execution_time", "error_reporting", "display_errors");
         foreach($nms as $n){
-            $v = formVal($n);
+            $v = formval($n);
             if($v != null){
                 $ini .=  $n."=".$v."\n";
             }
         }
         //textShow($ini);
-        textDownload($ini, "---.user.ini");
+        Response::textDownload($ini, "---.user.ini");
     }
     
     if($run == "robots" && $txt == "1"){
         $txt = "User-Agent:*\n";
-        $dis = lineToArray(formVal("rbt_disallow"));
-        $alw = lineToArray(formVal("rbt_allow"));
-        $smp = lineToArray(formVal("rbt_sitemap"));
+        $dis = lineToArray(formval("rbt_disallow"));
+        $alw = lineToArray(formval("rbt_allow"));
+        $smp = lineToArray(formval("rbt_sitemap"));
         
         foreach($dis as $v){ $txt .=  "Disallow:".$v."\n"; }
         foreach($alw as $v){ $txt .=  "Allow:".$v."\n"; }
         foreach($smp as $v){ $txt .=  "Sitemap:".$v."\n"; }
         //textShow($txt);
-        textDownload($txt, "robots.txt");
+        Response::textDownload($txt, "robots.txt");
     }
 
     if($run == "sitemap" && $txt == "1"){
-        $type = formVal("smp_type");
+        $type = formval("smp_type");
         if($type == "index"){
             $root = "sitemapindex";
             $tag = "sitemap";
@@ -130,25 +129,26 @@
         }
         $txt = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $txt.= '<'.$root.' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
-        $url = lineToArray(formVal("smp_url"));
+        $url = lineToArray(formval("smp_url"));
         foreach($url as $v){
             $txt .= "  <".$tag."><loc>".$v."</loc></".$tag.">\n";
         }
         $txt .= "</".$root.">";
         //textShow($txt);
-        textDownload($txt, "sitemap.xml");
+        Response::textDownload($txt, "sitemap.xml");
     }
-    echoHead("Setting Files");
+    
+    HtmlEcho::HEAD("Setting Files");
 ?>
 <div class="tgl-nav">
 <?php 
-    tglPnlRadio("hta", ".htaccess", $run);
-    tglPnlRadio("userini", ".user.ini", $run);
-    tglPnlRadio("robots", "robots.txt", $run);
-    tglPnlRadio("sitemap", "sitemap.xml", $run);
+    HtmlEcho::tglPnl_radio("hta", ".htaccess", $run);
+    HtmlEcho::tglPnl_radio("userini", ".user.ini", $run);
+    HtmlEcho::tglPnl_radio("robots", "robots.txt", $run);
+    HtmlEcho::tglPnl_radio("sitemap", "sitemap.xml", $run);
 ?>
 </div>
-<div <?php tglPnlAttr("hta", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("hta", $run); ?>>
     <h2>.httaccess @ Apache</h2>
     <form method="post">
         <input type="hidden" name="run" value="hta">
@@ -215,7 +215,7 @@
         </div>
     </div>
 </div>
-<div <?php tglPnlAttr("userini", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("userini", $run); ?>>
     <h2>.user.ini @ PHP</h2>
     <form method="post">
         <input type="hidden" name="run" value="userini">
@@ -269,7 +269,7 @@
     </form>
 </div>
 
-<div <?php tglPnlAttr("robots", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("robots", $run); ?>>
     <h2>robots.txt @ SEO</h2>
     <form method="post">
         <input type="hidden" name="run" value="robots">
@@ -304,7 +304,7 @@
         <li><a href="https://analytics.google.com/" target="_blank">Google Analytics</a></li>
     </ul>
 </div>
-<div <?php tglPnlAttr("sitemap", $run); ?>>
+<div <?php HtmlEcho::tglPnl_attr("sitemap", $run); ?>>
     <h2>sitemap.xml@ SEO</h2>
     <form method="post">
         <input type="hidden" name="run" value="sitemap">
@@ -333,4 +333,5 @@
         <li><a href="https://analytics.google.com/" target="_blank">Google Analytics</a></li>
     </ul>
 </div>
-<?php echoFoot(); ?>
+
+<?php HtmlEcho::FOOT(); ?>
