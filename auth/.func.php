@@ -1,5 +1,7 @@
 <?php
 /*
+ * https://github.com/t-ichi324/svm
+ * 
  * install php-zip
  * install php-mbstring
  * 
@@ -10,8 +12,8 @@
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 
 const TMP_DIR = ".tmp";
-//const DIR_ROOT = "";
-const DIR_ROOT = __DIR__."/../../";
+const DIR_ROOT = "";
+//const DIR_ROOT = __DIR__."/../../";
 
 function formval($name, $defaultVal = null){ if(isset($_POST[$name])){ return trim($_POST[$name]); } if(isset($_GET[$name])){ return trim($_GET[$name]); } return $defaultVal; }
 function isEmpty($str){ return (empty($str) && $str !== "0" && $str !== 0 && $str !== 0.0); }
@@ -193,19 +195,22 @@ class Response{
 class Path{
     public static function normalize($path){
         $hie = array();
-        $trm = rtrim(trim(str_replace("\\", "/", $path)),"/");
+        $trm = trim(str_replace("\\", "/", $path));
+        $pre = "";
+        for($i = 0; $i < strlen($trm); $i++) { if($trm[$i] !== "/"){ break; } $pre .= "/"; }
+        $trm = trim($trm, "/");
         $arr = explode("/", $trm);
         foreach($arr as $p){
             if($p === "" || $p === "."){ continue; }
             if($p === ".."){ array_pop($hie); continue; }
             $hie[] = $p;
         }
-        return implode(DIRECTORY_SEPARATOR, $hie);
+        return $pre . implode(DIRECTORY_SEPARATOR, $hie);
     }
     
     public static function tmp(... $appends){
         $cd = __DIR__.DIRECTORY_SEPARATOR.TMP_DIR.DIRECTORY_SEPARATOR;
-        if(!file_exists($cd) && is_dir($cd)){ mkdir($cd, 0777); file_put_contents($cd.".htaccess", "Deny from all\n"); }
+        if(!file_exists($cd)){ mkdir($cd, 0777); file_put_contents($cd.".htaccess", "Deny from all\n"); }
         if(!empty($appends)){ foreach($appends as $p){ $cd .= DIRECTORY_SEPARATOR.$p; } }
         return $cd;
     }
@@ -246,7 +251,7 @@ class FM{
         $fullpath = Path::normalize($path);
         if(isNotEmpty(self::$droot) && strpos($fullpath, self::$droot) !== 0){ return null; }
         $relative = substr($fullpath, strlen(self::$droot));
-        return url64_encode( trim($relative, DIRECTORY_SEPARATOR) );
+        return url64_encode($relative);
     }
     
     
@@ -282,9 +287,13 @@ class FM{
         for($i = 0; $i<$max-1; $i++){
             if($i > 0){ $path .= DIRECTORY_SEPARATOR; }
             $c = $arr[$i];
-            $path .= $c;
-            if(isNotEmpty(self::$droot) && strpos($path, self::$droot) !== 0){ continue; }
-            echo '<td><a href="./dir.php?i='.self::toId($path).'">'.h($c)."</a></td>";
+            if($path === "" && $c === ""){
+                echo '<td><a href="./dir.php?i='.self::toId("/").'">'.h("/")."</a></td>";
+            }else{
+                $path .= $c;
+                if(isNotEmpty(self::$droot) && strpos($path, self::$droot) !== 0){ continue; }
+                echo '<td><a href="./dir.php?i='.self::toId($path).'">'.h($c)."</a></td>";
+            }
         }
         echo "<td><strong>".h($arr[$max-1])."</strong></td></tr></tbody></table>";
     }
